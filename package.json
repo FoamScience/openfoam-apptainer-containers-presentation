@@ -1,0 +1,15 @@
+{
+  "name": "apptainer-containers-for-OpenFOAM",
+  "description": "HPC-ready Apptainer containers for OpenFOAM",
+  "author": "Mohammed Elwardi Fadeli",
+  "html-inject-meta": {
+    "name": "HPC-ready Apptainer containers for OpenFOAM",
+    "description": "Research Software Engineering SIG, October 2023",
+    "url": "http://foamscience.github.io/openfoam-apptainer-containers-presentation",
+    "author": "Mohammed Elwardi Fadeli",
+    "image": "http://foamscience.github.io/openfoam-apptainer-containers-presentation/thumbnail.png"
+  },
+  "dependencies": {
+    "html-inject-meta": "^3.0.0"
+  }
+}
