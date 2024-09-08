@@ -206,7 +206,7 @@ class Apptainer(Slide):
         self.play(FadeIn(bg14), Create(ttx), Create(arr))
         self.next_slide()
 
-        t00 = Text(f"0.0 Benefits of containerization...", t2w={"0.0": BOLD}, font_size=big_size).to_edge(UP+LEFT)
+        t00 = Text(f"0.0 Benefits of isolation...", t2w={"0.0": BOLD}, font_size=big_size).to_edge(UP+LEFT)
         keep_only_objects(self, Group(layout))
         self.play(Transform(title, t00))
         self.next_slide()
@@ -245,7 +245,7 @@ class Apptainer(Slide):
         self.play(Create(objs))
         items = [
             "Get images from HUBs or build from definition files.",
-            "What image formats to support?",
+            "What image formats to support? -> OCI",
             "Can CI/CD build container images? When?",
             "Should images be suitable for local development?"
         ]
@@ -483,7 +483,7 @@ ansible-playbook build.yaml \\
         self.play(Transform(title, t20))
         self.next_slide()
 
-        code_t = """apptainer run containers/projects/test-master.sif "jq '.' /apps.json" """
+        code_t = """apptainer run containers/projects/test-master.sif info """
         res_t = """{
   "openmpi": { "version": "4.1.5" },
   "openfoam": {
@@ -542,7 +542,7 @@ apptainer run --overlay overlay.img container.sif"""
         self.play(FadeIn(txt, code))
         self.next_slide()
 
-        t24 = Text(f"2.4 Container usage - Load custom bases", t2w={"2.4": BOLD}, font_size=big_size).to_edge(UP+LEFT)
+        t24 = Text(f"2.4 Container usage - Load custom base containers", t2w={"2.4": BOLD}, font_size=big_size).to_edge(UP+LEFT)
         keep_only_objects(self, Group(layout))
         self.play(Transform(title, t24))
 
@@ -578,10 +578,12 @@ docker scout cves fs://my-container"""
         self.play(FadeIn(code))
         self.next_slide()
 
-        t31 = Text(f"3.1 Use cases - Optimization on HPC", t2w={"3.1": BOLD}, font_size=big_size).to_edge(UP+LEFT)
+        t31 = Text(f"3.0 Use cases - Optimization on HPC", t2w={"3.0": BOLD}, font_size=big_size).to_edge(UP+LEFT)
         keep_only_objects(self, Group(layout))
-        self.play(Transform(title, t31))
+        im = ImageMobject("./images/ThermalMixer.png").scale(0.6)
+        self.play(Transform(title, t31), FadeIn(im))
         self.next_slide()
+        self.play(FadeOut(im))
 
         objs = Text("- Optimize OpenFOAM cases without installing/compiling OpenFOAM on host:", font_size=mid_size).next_to(title, DOWN*2).align_to(title, LEFT)
         self.play(Create(objs))
@@ -601,7 +603,7 @@ docker scout cves fs://my-container"""
         self.play(Create(txt))
         self.next_slide()
 
-        t32 = Text(f"3.2 Use cases - OpenFOAM Reflections", t2w={"3.2": BOLD}, font_size=big_size).to_edge(UP+LEFT)
+        t32 = Text(f"3.1 Use cases - OpenFOAM Reflections", t2w={"3.1": BOLD}, font_size=big_size).to_edge(UP+LEFT)
         keep_only_objects(self, Group(layout))
         self.play(Transform(title, t32))
         self.next_slide()
@@ -615,11 +617,8 @@ ansible-playbook /tmp/of_tainers/build.yaml \\
     --extra-vars="original_dir=$PWD" --extra-vars="@build/config.yaml"
 # In one terminal, open a JSON endpoint for OpenFOAM classes
 apptainer run containers/projects/reflections.sif \\
-    "/opt/openfoam-reflections/endpoint"
-# In another terminal (and choose one of the options), Either
-apptainer run containers/projects/reflections.sif \\
-    "npm start --prefix /opt/openfoam-reflections/reflect-json-app"
-# Then check localhost:3000 in a web browser, Or
+    "/opt/openfoam-reflections/applications/endpoint/endpoint"
+# In another terminal (and choose one of the options),
 apptainer run containers/projects/reflections.sif \\
     "/opt/openfoam-reflections/TUI/tui"
 # Notice the seamless networking and reduced dependencies frustration
@@ -628,6 +627,29 @@ apptainer run containers/projects/reflections.sif \\
         self.play(FadeIn(code))
         self.next_slide()
 
+        t40 = Text(f"4.0 Future of HPC containerization", t2w={"4.0": BOLD}, font_size=big_size).to_edge(UP+LEFT)
+        keep_only_objects(self, Group(layout))
+        self.play(Transform(title, t40))
+        self.next_slide()
+
+        items = [
+            "Kubernetes? -> no queue, no job reports, no profiling...",
+            "Kubernetes creating Slurm jobs? -> Why?...",
+        ]
+        last = self.itemize(items, objs, 1.5, False,
+            t2w={f"1{ITEM_ICON}": BOLD, f"2{ITEM_ICON}": BOLD, f"3{ITEM_ICON}": BOLD, f"4{ITEM_ICON}": BOLD, f"5{ITEM_ICON}": BOLD},
+            t2c={f"1{ITEM_ICON}": GREEN, f"2{ITEM_ICON}": GREEN, f"3{ITEM_ICON}": GREEN, f"4{ITEM_ICON}": GREEN, f"5{ITEM_ICON}": GREEN})
+
+        items = [
+            "(Slurm + Warewulf) will stick around for some more time...",
+            "Slurm started to support native OCI containers in 2020...",
+            "But we don't need that for Apptainer...",
+        ]
+        self.itemize(items, last, 1.5, False,
+            t2w={f"1{ITEM_ICON}": BOLD, f"2{ITEM_ICON}": BOLD, f"3{ITEM_ICON}": BOLD, f"4{ITEM_ICON}": BOLD, f"5{ITEM_ICON}": BOLD},
+            t2c={f"1{ITEM_ICON}": GREEN, f"2{ITEM_ICON}": GREEN, f"3{ITEM_ICON}": GREEN, f"4{ITEM_ICON}": GREEN, f"5{ITEM_ICON}": GREEN})
+
+        self.next_slide()
         tf = Text(f"THANK YOU", t2w={"THANK YOU": BOLD} ,font_size=big_size*2)
         keep_only_objects(self, Group(layout))
         self.play(Transform(title, tf))
